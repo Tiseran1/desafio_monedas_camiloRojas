@@ -20,14 +20,15 @@ renderGrafico(moneda);
 
 let montoPesos = parseFloat (inputMontoPesos.value);
 let valorCambio = await calcularValorCambio(montoPesos, codigoMoneda);
-parrafoMensaje.innerHTML = `Resultado: $${valorCambio}`
+parrafoMensaje.innerHTML =`Resultado: $${valorCambio}`
 
 });
 
 async function calcularValorCambio(monto, codigoMoneda){
     let moneda = await getMoneda(codigoMoneda);
     let valorMoneda = moneda.serie[0].valor;
-    return monto / valorMoneda
+    return Math.round  (monto / valorMoneda);
+
 }
 
 async function renderSelect(){
@@ -59,7 +60,7 @@ async function getMonedas(arrayCodigos){
 
 async function getMoneda(codigo){
     try {
-        const res =  await fetch(apiURL + codigo[i]);
+        const res =  await fetch(apiURL + codigo);
         let moneda = await res.json();
     
         return moneda; 
@@ -84,7 +85,7 @@ function renderGrafico(moneda){
           },S
         */ 
     
-    const label = serie10Ultimos.map(serie => serie.fecha.slice(0, 10)).reverse();
+    const labels = serie10Ultimos.map(serie => serie.fecha.slice(0, 10)).reverse();
     /*
         ["2023-02-14T03:00:00.000Z"
         "2023-02-13T03:00:00.000Z"]
@@ -94,7 +95,7 @@ function renderGrafico(moneda){
         ["793.79"
         "800.78"]
         */  
-        const dataset = [
+        const datasets = [
             {
                 label: "historial ultimos10 dias",
                 borderColor: "red",
